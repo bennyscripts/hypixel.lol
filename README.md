@@ -7,3 +7,6 @@ This is a great base to start a small image host.
 - Open a terminal and run `npm install` to install all dependencies.
 - Run `npm start` to start the node.
 
+### Copyright
+hypixel.lol is solely owned and developed by Benny. All rights go towards the developers.
+
