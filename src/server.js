@@ -143,6 +143,18 @@ app.get("/api/domains", (request, response) => {
     response.json(domains)
 })
 
+app.get("/api/uploads/:uploadkey", (request, response) => {
+    var user = request.params["uploadkey"].substring(0, request.params["uploadkey"].length - (uploadKeyLength + 1))
+    var uploads = JSON.parse(fs.readFileSync(__dirname + "/data/uploads.json"))
+    var uploads2 = []
+    Object.keys(uploads).forEach(index => {
+        if (uploads[index]["user"] == user) {
+            uploads2.push(uploads[index]["url"])
+        }
+    })
+    response.json(uploads2)
+})
+
 app.listen(config["nodeserverport"], () => {
     console.log("listening on :"+config["nodeserverport"])
 })
