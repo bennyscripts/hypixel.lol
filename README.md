@@ -21,7 +21,8 @@ Here is a list of all the keys in the config with their meaning.
 
 - `maindomain` : This is the main domain, if a domain is not set in the config it fallsback to this.  
 - `uploadkeylength` : How many characters are after the username in the upload key.  
-- `uploadkeys` : A list of the upload keys. Format: `{username}_{key}`. The part after the underscore must be the same length as uploadkeylength.
+- `uploadkeys` : A list of the upload keys. Format: `{username}_{key}`. The part after the underscore must be the same length as uploadkeylength.  
+- `nodeserverport` : The port for the server.
 
 ### Copyright
 hypixel.lol is solely owned and developed by Benny. All rights go towards the developers.
