@@ -15,6 +15,14 @@ Finally, all domains pointed should update and they should be working.
 To use subdomains you need to setup a wildcard subdomain (`*`) in each domain.  
 This allowes anything to be put infront of the domain. Allowing custom subdomains, even ones that other people may already be using.
 
+### Config
+The config may seem a little confusing at first.  
+Here is a list of all the keys in the config with their meaning.  
+
+- `maindomain` : This is the main domain, if a domain is not set in the config it fallsback to this.  
+- `uploadkeylength` : How many characters are after the username in the upload key.  
+- `uploadkeys` : A list of the upload keys. Format: `{username}_{key}`. The part after the underscore must be the same length as uploadkeylength.
+
 ### Copyright
 hypixel.lol is solely owned and developed by Benny. All rights go towards the developers.
 
