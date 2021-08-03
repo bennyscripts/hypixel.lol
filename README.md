@@ -25,6 +25,10 @@ Here is a list of all the keys in the config with their meaning.
 - `uploadkeys` : A list of the upload keys. Format: `{username}_{key}`. The part after the underscore must be the same length as uploadkeylength.  
 - `nodeserverport` : The port for the server.
 
+### Api
+- **GET** `/api/uploads/:uploadkey` : Returns a list of uploads uploaded with the upload key.
+- **GET** `/api/domains` : Returns a list of all the domains.
+
 ### Copyright
 hypixel.lol is solely owned and developed by Benny. All rights go towards the developers.
 
