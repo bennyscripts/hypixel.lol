@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>hypixel.lol</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+        <link rel="stylesheet" href="assets/style.css">
+        <link rel="stylesheet" href="https://use.typekit.net/obf6rgz.css">      
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">  
+    </head>
+    <body>
+        <div class="center">
+            <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-content">
+                      <div class="input-group mb-2">
+                        <input type="text" class="custom-input" style="color: #9b9b9b!important;" placeholder="Upload key..." id="upload-key" required>
+                      </div>
+
+                      <div class="input-group mb-2">
+                        <input type="text" class="custom-input" style="color: #9b9b9b!important;" id="subdomain-input" required>
+                        <select id="domain-select" class="custom-input" style="color: #9b9b9b!important;"></select>
+                      </div>                      
+            
+                      <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" style="background-color: #171717;">
+                            <input type="checkbox" id="embeds-checkbox">
+                          </span>
+                        </div>
+                        <input type="text" class="custom-input" style="padding-left: 0; color: #9b9b9b!important; border-top-left-radius: 0px; border-bottom-left-radius: 0px;" value="Use embeds?" readonly>
+                      </div>
+            
+                      <div id="embedViewer-wrapper">
+                        <div class="card" id="embedViewer" style="width: 100%!important;">
+                          <div class="card-header mb-0" id="embedViewer_header">
+                            <input type="text" id="embedViewer_author" class="embedViewer-input mb-0" placeholder="Embed author..." value="">
+                          </div>
+                          <div class="card-body pt-0" id="embedViewer_body">
+                            <input type="text" class="card-title embedViewer-input mb-0" id="embedViewer_title" placeholder="Embed title...">
+                            <textarea class="embedViewer-input mb-0" id="embedViewer_description"></textarea>
+                            <div style="text-align: left; margin-top: 16px;"><img class="img-fluid" id="embedViewer_image" src="https://upload.wikimedia.org/wikipedia/commons/d/d1/ShareX_Logo.png"></div>
+                          </div>
+                          <div class="card-footer" id="embedViewer_footer" style="text-align: left;">
+                            <p class="m-0">Placeholders: {filesize}, {username}, {filename}, {randomemoji}</p>
+                          </div>
+                        </div>
+            
+                        <div class="input-group mt-2">
+                          <input type="text" class="form-control" id="embedColour-text" style="color: #9b9b9b!important;" readonly>
+                          <div class="input-group-append">
+                            <span class="input-group-text" id="embedColour-wrapper">
+                              <input type="color" id="embedColour" value="#ff0000" style="opacity: 0%;">
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+            
+                      <a onclick="downloadConfig()" class="button btn-block mt-2">Download Config</a>
+                    </div>
+                  </div>
+                </div>
+        
+                <textarea id="config-result" placeholder="generated config here..." style="display: none; background-color: #171717; color: #9b9b9b; border: none; overflow-y: hidden; width: 100%; height: 100%; font-size: 80.7%; resize: none;" readonly></textarea>
+              </div>
+            </div>
+        </div> 
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
+        <script type="text/javascript">
+            var configJson = {};
+            var notification = document.getElementById("notification");
+            var notificationText = document.getElementById("notification-text");
+      
+            autosize(document.getElementById("embedViewer_description"));
+      
+            function sleep (time) {
+              return new Promise((resolve) => setTimeout(resolve, time));
+            }
+      
+            function showNotification(delay, text) {
+                alert(text)
+            }
+
+            function getDomains() {
+              var domainSelect = document.getElementById("domain-select")
+              $.get("https://hypixel.lol/api/domains", (data, status) => {
+                data.forEach(item => {
+                  var el = document.createElement("option")
+                  el.value = item
+                  el.innerText = item
+                  domainSelect.appendChild(el)
+                })
+              })
+            }
+      
+            function generateConfig() {
+              var configResultTextarea = document.getElementById('config-result');
+      
+              var uploadKey = document.getElementById('upload-key');
+      
+              var embeds = document.getElementById('embeds-checkbox');
+              var embedAuthor = document.getElementById('embedViewer_author');
+              var embedTitle = document.getElementById('embedViewer_title');
+              var embedDescription = document.getElementById('embedViewer_description');
+              var embedColour = document.getElementById('embedColour-text');
+              var domain = document.getElementById("domain-select").value
+              var subdomain = document.getElementById("subdomain-input").value
+      
+              if (!embeds.checked) {
+                embedAuthor2 = "";
+                embedTitle2 = "";
+                embedDescription2 = "";
+                embedColour2 = "";
+              } else {
+                embedAuthor2 = embedAuthor.value;
+                embedTitle2 = embedTitle.value;
+                embedDescription2 = embedDescription.value;
+                embedColour2 = embedColour.value;                  
+              }
+      
+              config = {
+                          "Version": "13.4.0",
+                          "Name": "hypixel.lol",
+                          "DestinationType": "ImageUploader, FileUploader",
+                          "RequestMethod": "POST",
+                          "RequestURL": "https://hypixel.lol/upload",
+                          "Body": "MultipartFormData",
+                          "Arguments": {
+                            "upload-key": uploadKey.value,
+                            "embed-author": embedAuthor2,
+                            "embed-title": embedTitle2,
+                            "embed-description": embedDescription2,
+                            "embed-colour": embedColour2,
+                            "domain": domain,
+                            "subdomain": subdomain 
+                          },
+                          "FileFormName": "file"
+                        }
+      
+              configJson = JSON.stringify(config, null, 2);
+      
+              configResultTextarea.value = JSON.stringify(config, null, 2);
+      
+              setTimeout(generateConfig, 1);
+            }
+      
+            function downloadConfig() {
+              var uploadKey = document.getElementById('upload-key');
+              var filenameLength = document.getElementById('filename-length');
+      
+              if (uploadKey.value == "" || uploadKey.value == null) {
+                showNotification(1750, "Cant download your config because you didnt fill in your upload key.")
+                return;
+              }
+      
+              var filename = "sharex.wtf.sxcu";
+              var text = configJson;
+              var element = document.createElement('a');
+      
+              element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+              element.setAttribute('download', filename);
+      
+              element.style.display = 'none';
+              document.body.appendChild(element);
+      
+              element.click();
+      
+              document.body.removeChild(element);
+            }
+      
+            function updateEmbedColour() {
+              var colourPicker = document.getElementById("embedColour");
+              var colourValue = document.getElementById("embedColour-text");
+              var colourWrapper = document.getElementById("embedColour-wrapper");
+      
+              colourValue.value = colourPicker.value;
+              $('#embedViewer').css('border-left', "4px solid " + colourPicker.value);
+              $('#embedColour-wrapper').css('background', colourValue.value);
+      
+              setTimeout(updateEmbedColour, 1);
+            }
+      
+            function checkEmbedEnabled() {
+              var checkbox = document.getElementById('embeds-checkbox');
+              $("#embedViewer_description").show();
+      
+              if (checkbox.checked) {
+                $("#embedViewer-wrapper").show();
+              } else {
+                $("#embedViewer-wrapper").hide();
+              }
+      
+              setTimeout(checkEmbedEnabled, 1);
+            }
+      
+            checkEmbedEnabled();
+            updateEmbedColour();
+            generateConfig();
+            getDomains()
+          </script>        
+    </body>
+</html>
