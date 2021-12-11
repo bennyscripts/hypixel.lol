@@ -161,3 +161,5 @@ app.listen(config["nodeserverport"], () => {
 
 app.use(express.static(appDir + "/public/"))
 app.use('assets/', serveIndex(appDir + '/assets/'))
+
+// test
